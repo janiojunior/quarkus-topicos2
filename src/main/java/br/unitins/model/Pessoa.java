@@ -9,4 +9,8 @@ public class Pessoa extends PanacheEntity {
     public String nome;
     public String cpf;
     public Integer idade;
+
+    public static Pessoa findByNome(String nome) {
+        return find("nome", nome).firstResult();
+    }
 }
