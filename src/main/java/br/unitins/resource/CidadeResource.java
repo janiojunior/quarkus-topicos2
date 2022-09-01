@@ -16,49 +16,61 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.unitins.model.Estado;
+import br.unitins.dto.CidadeDTO;
+import br.unitins.dto.CidadeResponseDTO;
+import br.unitins.model.Cidade;
+import br.unitins.repository.CidadeRepository;
 import br.unitins.repository.EstadoRepository;
 
-@Path("/estados")
+@Path("/cidades")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class EstadoResource {
+public class CidadeResource {
     
     @Inject
-    private EstadoRepository repository;
+    private CidadeRepository repository;
 
     @GET
-    public List<Estado> getAll(){
-        return repository.listAll();
+    public List<CidadeResponseDTO> getAll(){
+        return repository.findAllCidades();
     }
 
     @GET
     @Path("/search/{nome}")
-    public List<Estado> getListEstado(String nome){
+    public List<Cidade> getListCidade(String nome){
         return repository.findByNome(nome);
     }
 
     @GET
     @Path("/{id}")
-    public Estado get(Long id) {
+    public Cidade get(Long id) {
         return repository.findById(id);
     }
 
     @POST
     @Transactional
-    public Response create(Estado estado) {
-        repository.persist(estado);
-        return Response.created(URI.create("/estados/" +estado.id)).build();
+    public Response create(CidadeDTO dto) { 
+       EstadoRepository rEstado = new EstadoRepository();
+
+        Cidade entity = new Cidade();
+        entity.nome = dto.getNome();
+        entity.estado = rEstado.findById(dto.getIdEstado());
+
+        repository.persist(entity);
+        return Response.created(URI.create("/cidades/" +entity.id)).build();
     }
 
     @PUT
     @Transactional
     @Path("/{id}")
-    public Estado update(Long id, Estado estado) {
-        Estado entity = repository.findById(id);
+    public Cidade update(Long id, CidadeDTO dto) {
+        EstadoRepository rEstado = new EstadoRepository();
+        Cidade entity = repository.findById(id);
         if(entity == null)
             throw new NotFoundException();
-        entity.nome = estado.nome;
+
+        entity.nome = dto.getNome();
+        entity.estado = rEstado.findById(dto.getIdEstado());
 
         return entity;
     }
@@ -67,7 +79,7 @@ public class EstadoResource {
     @Path("/{id}")
     @Transactional
     public void delete(Long id) {
-        Estado entity = repository.findById(id);
+        Cidade entity = repository.findById(id);
         if(entity == null)
             throw new NotFoundException();
         repository.delete(entity);

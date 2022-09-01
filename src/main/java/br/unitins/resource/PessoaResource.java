@@ -7,8 +7,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import br.unitins.model.Pessoa;
-import io.quarkus.hibernate.orm.rest.data.panache.PanacheEntityResource;
-import io.quarkus.rest.data.panache.MethodProperties;
 
 @Path("/pessoa")
 public class PessoaResource  {
