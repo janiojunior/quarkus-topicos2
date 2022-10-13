@@ -48,7 +48,7 @@ public class EstadoResource {
     @Transactional
     public Response create(Estado estado) {
         repository.persist(estado);
-        return Response.created(URI.create("/estados/" +estado.id)).build();
+        return Response.created(URI.create("/estados/" +estado.id)).entity(estado).build();
     }
 
     @PUT
@@ -59,7 +59,7 @@ public class EstadoResource {
         if(entity == null)
             throw new NotFoundException();
         entity.nome = estado.nome;
-
+        entity.sigla = estado.sigla;
         return entity;
     }
 
