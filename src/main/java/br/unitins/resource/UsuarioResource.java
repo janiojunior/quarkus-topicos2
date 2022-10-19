@@ -16,70 +16,73 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.unitins.dto.CidadeDTO;
-import br.unitins.dto.CidadeResponseDTO;
-import br.unitins.model.Cidade;
+import br.unitins.dto.UsuarioDTO;
+import br.unitins.dto.UsuarioResponseDTO;
+import br.unitins.model.Usuario;
+import br.unitins.repository.UsuarioRepository;
 import br.unitins.repository.CidadeRepository;
-import br.unitins.repository.EstadoRepository;
 
-@Path("/cidades")
+@Path("/usuarios")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class CidadeResource {
+public class UsuarioResource {
     
     @Inject
-    private CidadeRepository repository;
+    private UsuarioRepository repository;
 
     @GET
-    public List<CidadeResponseDTO> getAll(){
-        return repository.findAllCidades();
+    public List<UsuarioResponseDTO> getAll(){
+        return repository.findAllUsuarios();
     }
 
     @GET
     @Path("/search/{nome}")
-    public List<Cidade> getListCidade(String nome){
+    public List<Usuario> getListUsuario(String nome){
         return repository.findByNome(nome);
     }
 
     @GET
     @Path("/{id}")
-    public Cidade get(Long id) {
-        return repository.findById(id);
+    public UsuarioResponseDTO get(Long id) {
+        return new UsuarioResponseDTO(repository.findById(id));
     }
 
     @POST
     @Transactional
-    public Response create(CidadeDTO dto) { 
-       EstadoRepository rEstado = new EstadoRepository();
+    public Response create(UsuarioDTO dto) { 
+       CidadeRepository rCidade = new CidadeRepository();
 
-        Cidade entity = new Cidade();
+        Usuario entity = new Usuario();
         entity.nome = dto.getNome();
-        entity.estado = rEstado.findById(dto.getIdEstado());
+        entity.cidade = rCidade.findById(dto.getIdCidade());
 
         repository.persist(entity);
-        return Response.created(URI.create("/cidades/" +entity.id)).entity(entity).build();
+        
+        return Response.created(URI.create("/usuarios/" +entity.id)).entity(new UsuarioResponseDTO(entity)).build();
     }
 
     @PUT
     @Transactional
     @Path("/{id}")
-    public Cidade update(Long id, CidadeDTO dto) {
-        EstadoRepository rEstado = new EstadoRepository();
-        Cidade entity = repository.findById(id);
+    public UsuarioResponseDTO update(Long id, UsuarioDTO dto) {
+        CidadeRepository rCidade = new CidadeRepository();
+        Usuario entity = repository.findById(id);
         if(entity == null)
             throw new NotFoundException();
 
         entity.nome = dto.getNome();
-        entity.estado = rEstado.findById(dto.getIdEstado());
+        entity.login = dto.getLogin();
+        entity.senha = dto.getSenha();
+        entity.cidade = rCidade.findById(dto.getIdCidade());
 
-        return entity;
+        return new UsuarioResponseDTO(entity);
     }
 
     @DELETE
     @Path("/{id}")
     @Transactional
     public void delete(Long id) {
-        Cidade entity = repository.findById(id);
+        Usuario entity = repository.findById(id);
         if(entity == null)
             throw new NotFoundException();
         repository.delete(entity);
