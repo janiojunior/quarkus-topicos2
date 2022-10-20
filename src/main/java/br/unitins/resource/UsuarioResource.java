@@ -37,7 +37,7 @@ public class UsuarioResource {
 
     @GET
     @Path("/search/{nome}")
-    public List<Usuario> getListUsuario(String nome){
+    public List<UsuarioResponseDTO> getListUsuario(String nome){
         return repository.findByNome(nome);
     }
 
@@ -54,6 +54,8 @@ public class UsuarioResource {
 
         Usuario entity = new Usuario();
         entity.nome = dto.getNome();
+        entity.login = dto.getLogin();
+        entity.senha = dto.getSenha();
         entity.cidade = rCidade.findById(dto.getIdCidade());
 
         repository.persist(entity);

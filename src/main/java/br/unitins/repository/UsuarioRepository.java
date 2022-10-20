@@ -17,7 +17,9 @@ public class UsuarioRepository implements PanacheRepository<Usuario>{
         .map(usuario -> new UsuarioResponseDTO(usuario))
         .collect(Collectors.toList());
     }
-    public  List<Usuario> findByNome(String nome) {
-        return find("nome LIKE ?1", "%"+nome+"%").list();
+    public  List<UsuarioResponseDTO> findByNome(String nome) {
+        return find("nome LIKE ?1", "%"+nome+"%").stream()
+        .map(usuario -> new UsuarioResponseDTO(usuario))
+        .collect(Collectors.toList());
     }
 }

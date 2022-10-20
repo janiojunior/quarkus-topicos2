@@ -18,7 +18,9 @@ public class CidadeRepository implements PanacheRepository<Cidade>{
         .map(cidade -> new CidadeResponseDTO(cidade))
         .collect(Collectors.toList());
     }
-    public  List<Cidade> findByNome(String nome) {
-        return find("nome LIKE ?1", "%"+nome+"%").list();
+    public  List<CidadeResponseDTO> findByNome(String nome) {
+        return find("nome LIKE ?1", "%"+nome+"%").stream()
+        .map(cidade -> new CidadeResponseDTO(cidade))
+        .collect(Collectors.toList());
     }
 }

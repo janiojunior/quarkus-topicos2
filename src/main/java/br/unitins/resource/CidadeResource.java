@@ -37,14 +37,14 @@ public class CidadeResource {
 
     @GET
     @Path("/search/{nome}")
-    public List<Cidade> getListCidade(String nome){
+    public List<CidadeResponseDTO> getListCidade(String nome){
         return repository.findByNome(nome);
     }
 
     @GET
     @Path("/{id}")
-    public Cidade get(Long id) {
-        return repository.findById(id);
+    public CidadeResponseDTO get(Long id) {
+        return new CidadeResponseDTO(repository.findById(id));
     }
 
     @POST
@@ -57,13 +57,15 @@ public class CidadeResource {
         entity.estado = rEstado.findById(dto.getIdEstado());
 
         repository.persist(entity);
-        return Response.created(URI.create("/cidades/" +entity.id)).entity(entity).build();
+        CidadeResponseDTO retorno = new CidadeResponseDTO(entity);
+
+        return Response.created(URI.create("/cidades/" +entity.id)).entity(retorno).build();
     }
 
     @PUT
     @Transactional
     @Path("/{id}")
-    public Cidade update(Long id, CidadeDTO dto) {
+    public CidadeResponseDTO update(Long id, CidadeDTO dto) {
         EstadoRepository rEstado = new EstadoRepository();
         Cidade entity = repository.findById(id);
         if(entity == null)
@@ -72,7 +74,7 @@ public class CidadeResource {
         entity.nome = dto.getNome();
         entity.estado = rEstado.findById(dto.getIdEstado());
 
-        return entity;
+        return new CidadeResponseDTO(entity);
     }
 
     @DELETE
