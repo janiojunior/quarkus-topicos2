@@ -16,10 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+
 import br.unitins.dto.UsuarioDTO;
 import br.unitins.dto.UsuarioResponseDTO;
+import br.unitins.form.UsuarioForm;
 import br.unitins.model.Usuario;
 import br.unitins.repository.UsuarioRepository;
+import br.unitins.service.FileService;
 import br.unitins.repository.CidadeRepository;
 
 @Path("/usuarios")
@@ -29,6 +33,9 @@ public class UsuarioResource {
     
     @Inject
     private UsuarioRepository repository;
+
+    @Inject
+    private FileService fileService;
 
     @GET
     public List<UsuarioResponseDTO> getAll(){
@@ -96,4 +103,24 @@ public class UsuarioResource {
         return repository.count();
     }
 
+
+    @POST
+    @Path("/{postupload}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Transactional
+    public Response createComUpload(@MultipartForm UsuarioForm form) { 
+       CidadeRepository rCidade = new CidadeRepository();
+
+        Usuario entity = new Usuario();
+        entity.nome = form.getNome();
+        entity.login = form.getLogin();
+        entity.senha = form.getSenha();
+        entity.cidade = rCidade.findById(form.getIdCidade());
+
+        repository.persist(entity);
+
+        fileService.salvarImagemUsuario(form.getImagem(), entity.id + ".png");
+        
+        return Response.created(URI.create("/usuarios/" +entity.id)).entity(new UsuarioResponseDTO(entity)).build();
+    }
 }
