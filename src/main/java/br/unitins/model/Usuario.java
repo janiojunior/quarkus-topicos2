@@ -10,6 +10,7 @@ public class Usuario extends DefaultEntity {
     public String nome; 
     public String login;
     public String senha;
+    public String nomeImagem;
 
     @ManyToOne
     @JoinColumn(name = "id_cidade")

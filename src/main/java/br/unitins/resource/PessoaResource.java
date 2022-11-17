@@ -1,5 +1,9 @@
 package br.unitins.resource;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,6 +21,12 @@ public class PessoaResource  {
     @Produces(MediaType.APPLICATION_JSON)
     public Pessoa getPessoa(String nome) {
        return Pessoa.findByNome(nome);
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String teste() {
+        return System.getProperty("user.home");
     }
    
     // desabilitando o recurso

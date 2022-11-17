@@ -11,6 +11,7 @@ public class UsuarioResponseDTO {
     private String nome;
     private String login;
     private String senha;
+    private String nomeImagem;
     private Map<String, Object> cidade;
 
     public UsuarioResponseDTO(Usuario usuario) {
@@ -18,6 +19,7 @@ public class UsuarioResponseDTO {
         this.nome = usuario.nome;
         this.login = usuario.login;
         this.senha = usuario.senha;
+        this.nomeImagem = usuario.nomeImagem;
         this.cidade = new HashMap<String, Object>();
         this.cidade.put("id", usuario.cidade.id);
         this.cidade.put("nome", usuario.cidade.nome);
@@ -64,5 +66,12 @@ public class UsuarioResponseDTO {
         this.cidade = cidade;
     }
 
-   
+    public String getNomeImagem() {
+        return nomeImagem;
+    }
+
+    public void setNomeImagem(String nomeImagem) {
+        this.nomeImagem = nomeImagem;
+    }
+
 }
