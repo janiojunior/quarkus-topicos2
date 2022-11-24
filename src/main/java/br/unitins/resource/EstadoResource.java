@@ -3,6 +3,8 @@ package br.unitins.resource;
 import java.net.URI;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -12,6 +14,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,19 +31,22 @@ public class EstadoResource {
     private EstadoRepository repository;
 
     @GET
+    @PermitAll
     public List<Estado> getAll(){
         return repository.listAll();
     }
 
     @GET
+    @RolesAllowed({"Admin", "User"})
     @Path("/search/{nome}")
-    public List<Estado> getListEstado(String nome){
+    public List<Estado> getListEstado(@PathParam("nome") String nome){
         return repository.findByNome(nome);
     }
 
     @GET
     @Path("/{id}")
-    public Estado get(Long id) {
+    @RolesAllowed({"Admin"})
+    public Estado get(@PathParam("id") Long id) {
         return repository.findById(id);
     }
 
@@ -54,7 +60,7 @@ public class EstadoResource {
     @PUT
     @Transactional
     @Path("/{id}")
-    public Estado update(Long id, Estado estado) {
+    public Estado update(@PathParam("id") Long id, Estado estado) {
         Estado entity = repository.findById(id);
         if(entity == null)
             throw new NotFoundException();
@@ -66,7 +72,7 @@ public class EstadoResource {
     @DELETE
     @Path("/{id}")
     @Transactional
-    public void delete(Long id) {
+    public void delete(@PathParam("id") Long id) {
         Estado entity = repository.findById(id);
         if(entity == null)
             throw new NotFoundException();

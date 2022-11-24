@@ -41,9 +41,14 @@ public class UsuarioResource {
     @Inject
     private FileService fileService;
 
+    // @GET
+    // public List<UsuarioResponseDTO> getAll(){
+    //     return repository.findAllUsuarios();
+    // }
+
     @GET
-    public List<UsuarioResponseDTO> getAll(){
-        return repository.findAllUsuarios();
+    public List<Usuario> getAll(){
+        return repository.findAllUsuarios2();
     }
 
     @GET

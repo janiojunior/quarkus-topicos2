@@ -14,5 +14,10 @@ insert into Estado(nome, data_cadastro, sigla) values ('São Paulo', '08-25-2022
 insert into Cidade(nome, data_cadastro, id_estado) values ('Palmas', '08-25-2022', 1);
 insert into Cidade(nome, data_cadastro, id_estado) values ('Gurupi', '08-25-2022', 1);
 
-insert into Usuario(nome, login, senha, data_cadastro, id_cidade) values ('Jon Snow', 'jon', '123456', '10-18-2022', 1);
-insert into Usuario(nome, login, senha, data_cadastro, id_cidade) values ('Vegeta', 'vegeta', '123456', '10-18-2022', 1);
+insert into Usuario(nome, login, senha, data_cadastro, id_cidade) values ('Jon Snow', 'jon', 'AceO9r1pjFITo2FgWL4z1xynZ20NbQRVLKL7ztuXU1zH7nrZXlvkmFXIOJBB1c7eXpo6ALvWMJv1APx2QtzdkA==', '10-18-2022', 1);
+insert into Usuario(nome, login, senha, data_cadastro, id_cidade) values ('Vegeta', 'vegeta', 'AceO9r1pjFITo2FgWL4z1xynZ20NbQRVLKL7ztuXU1zH7nrZXlvkmFXIOJBB1c7eXpo6ALvWMJv1APx2QtzdkA==', '10-18-2022', 1);
+
+insert into Roles(id_usuario, role) values (1, 'Admin');
+insert into Roles(id_usuario, role) values (1, 'User');
+
+insert into Roles(id_usuario, role) values (2, 'User');
