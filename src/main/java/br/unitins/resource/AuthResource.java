@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import br.unitins.dto.AuthUsuarioDTO;
 import br.unitins.model.Usuario;
@@ -35,7 +36,12 @@ public class AuthResource {
 
         Usuario usuarioValido = repository.findByLoginAndSenha(usuario.getLogin(), hash);
 
-        return Response.ok(jwtService.generateJwt(usuarioValido)).build();
+       if (usuarioValido == null)
+            return Response.status(Status.NO_CONTENT).entity("Usuário não encontrado.").build();
+        else 
+            return Response.ok()
+                .header("Authorization", jwtService.generateJwt(usuarioValido))
+                .build();
     }
     
 }

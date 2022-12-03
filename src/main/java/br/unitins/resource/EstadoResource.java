@@ -51,6 +51,7 @@ public class EstadoResource {
     }
 
     @POST
+    @RolesAllowed({"Invalido"})
     @Transactional
     public Response create(Estado estado) {
         repository.persist(estado);
@@ -58,6 +59,7 @@ public class EstadoResource {
     }
 
     @PUT
+    @RolesAllowed({"Admin"})
     @Transactional
     @Path("/{id}")
     public Estado update(@PathParam("id") Long id, Estado estado) {
